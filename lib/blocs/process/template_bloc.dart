@@ -61,4 +61,9 @@ class TemplateBloc extends ProcessBloc {
 
     _inCreateInstanceSubject.close();
   }
+
+  @override
+  String toString() {
+    return 'TemplateBloc{title:${mold.title}, id:$id}';
+  }
 }

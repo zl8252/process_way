@@ -25,6 +25,14 @@ class _AppState extends State<App> {
   }
 
   @override
+  void dispose() {
+    _processesBloc.dispose();
+    _processesBloc.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new BlocProvider<ProcessCreationBloc>(
       bloc: _processCreationBloc,
@@ -32,6 +40,7 @@ class _AppState extends State<App> {
         bloc: _processesBloc,
         child: new MaterialApp(
           title: "Process Way",
+          theme: new ThemeData(),
           home: new MainScreen(),
         ),
       ),

@@ -25,7 +25,7 @@ class ProcessesBloc extends BlocBase {
     _inSaveInstanceSubject.listen(_onInSaveInstance);
     _inSaveTemplateSubject.listen(_onInSaveTemplate);
     _inDeleteInstanceSubject.listen(_onInDeleteInstance);
-    _inDeleteInstanceSubject.listen(_onInDeleteTemplate);
+    _inDeleteTemplateSubject.listen(_onInDeleteTemplate);
 
     _updateInstancesStream();
     _updateTemplatesStream();
@@ -154,7 +154,7 @@ class ProcessesBloc extends BlocBase {
   }
 
   Future _onInDeleteTemplate(int templateId) async {
-    _templatesRepository.deleteTemplateWithId(templateId);
+    await _templatesRepository.deleteTemplateWithId(templateId);
 
     _updateTemplatesStream();
   }

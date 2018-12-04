@@ -6,7 +6,7 @@ class TemplatesRepository {
   Map<int, TemplateBloc> _templates = new Map();
 
   Future<List<TemplateBloc>> loadAllTemplates() async {
-    return _templates.values;
+    return _templates.values.toList();
   }
 
   Future<TemplateBloc> loadTemplateById(int templateId) async {

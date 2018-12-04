@@ -6,7 +6,7 @@ class InstancesRepository {
   Map<int, InstanceBloc> _instances = new Map();
 
   Future<List<InstanceBloc>> loadAllInstances() async {
-    return _instances.values;
+    return _instances.values.toList();
   }
 
   Future<InstanceBloc> loadInstanceById(int instanceId) async {
