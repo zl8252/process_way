@@ -29,7 +29,7 @@ class InstancesRepository {
 
   Future<int> generateUniqueInstanceId() async {
     int idCandidate = new DateTime.now().millisecondsSinceEpoch;
-    while(_instances.containsKey(idCandidate)){
+    while (_instances.containsKey(idCandidate)) {
       idCandidate++;
     }
 

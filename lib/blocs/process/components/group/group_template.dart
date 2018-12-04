@@ -37,7 +37,8 @@ class GroupTemplate extends GroupShared implements IComponentTemplate {
   final _inCreateInstanceSubject =
       new PublishSubject<Completer<GroupInstance>>();
 
-  Sink<IComponentTemplate> get inAddComponentAtBack => _inAddComponentAtBackSubject;
+  Sink<IComponentTemplate> get inAddComponentAtBack =>
+      _inAddComponentAtBackSubject;
 
   Sink<Null> get inRemoveAllComponents => _inRemoveAllComponentsSubject;
 
