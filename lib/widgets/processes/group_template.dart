@@ -19,25 +19,6 @@ class GroupTemplate extends StatefulWidget {
 }
 
 class _GroupTemplateState extends State<GroupTemplate> {
-  bool _isExpanded;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _isExpanded = true;
-  }
-
-  void _toggleExpansion() {
-    setState(() {
-      _isExpanded = !_isExpanded;
-    });
-  }
-
-  void _clearAllItems() {
-    widget.bloc.inRemoveAllItems.add(null);
-  }
-
   void _addNewItemAtBack() {
     BlocProvider.of<DesigningScreenBloc>(context)
         .inAddNewItemToGroup
@@ -54,21 +35,26 @@ class _GroupTemplateState extends State<GroupTemplate> {
       columnItems.add(
         new _GroupTemplateInfo(
           bloc: widget.bloc,
-          isExpanded: _isExpanded,
-          onToggleExpansion: _toggleExpansion,
-          onClearAllItems: _clearAllItems,
         ),
       );
     }
 
-    if (_isExpanded) {
-      columnItems.add(
-        new _GroupTemplateItems(
-          bloc: widget.bloc,
-          onAddItem: _addNewItemAtBack,
-        ),
-      );
-    }
+    columnItems.add(
+      new StreamBuilder<bool>(
+        initialData: widget.bloc.isExpanded.value,
+        stream: widget.bloc.isExpanded,
+        builder: (context, snapshot) {
+          if (snapshot.data) {
+            return new _GroupTemplateItems(
+              bloc: widget.bloc,
+              onAddItem: _addNewItemAtBack,
+            );
+          } else {
+            return new Container();
+          }
+        },
+      ),
+    );
 
     return new Column(
       children: columnItems,
@@ -79,19 +65,17 @@ class _GroupTemplateState extends State<GroupTemplate> {
 class _GroupTemplateInfo extends StatelessWidget {
   _GroupTemplateInfo({
     @required this.bloc,
-    @required this.isExpanded,
-    @required this.onToggleExpansion,
-    @required this.onClearAllItems,
-  })  : assert(bloc != null),
-        assert(isExpanded != null),
-        assert(onToggleExpansion != null),
-        assert(onClearAllItems != null);
+  }) : assert(bloc != null);
 
   final GroupTemplateBloc bloc;
 
-  final bool isExpanded;
-  final VoidCallback onToggleExpansion;
-  final VoidCallback onClearAllItems;
+  void _toggleExpansion() {
+    bloc.inToggleIsExpanded.add(null);
+  }
+
+  void _clearAllItems() {
+    bloc.inRemoveAllItems.add(null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +85,17 @@ class _GroupTemplateInfo extends StatelessWidget {
         padding: new EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: new Row(
           children: <Widget>[
-            new IconButton(
-              icon: new Icon(isExpanded
-                  ? Icons.remove_circle_outline
-                  : Icons.add_circle_outline),
-              onPressed: onToggleExpansion,
+            new StreamBuilder<bool>(
+              initialData: bloc.isExpanded.value,
+              stream: bloc.isExpanded,
+              builder: (context, snapshot) {
+                return new IconButton(
+                  icon: new Icon(snapshot.data
+                      ? Icons.remove_circle_outline
+                      : Icons.add_circle_outline),
+                  onPressed: _toggleExpansion,
+                );
+              },
             ),
             new Expanded(
               child: new RxEditableText(
@@ -119,7 +109,7 @@ class _GroupTemplateInfo extends StatelessWidget {
             ),
             new IconButton(
               icon: new Icon(Icons.clear_all),
-              onPressed: onClearAllItems,
+              onPressed: _clearAllItems,
             ),
           ],
         ),
@@ -129,15 +119,26 @@ class _GroupTemplateInfo extends StatelessWidget {
 }
 
 class _GroupTemplateItems extends StatelessWidget {
-  _GroupTemplateItems({@required this.bloc, @required this.onAddItem})
-      : assert(bloc != null),
+  _GroupTemplateItems({
+    @required this.bloc,
+    @required this.onAddItem,
+  })  : assert(bloc != null),
         assert(onAddItem != null);
 
   final GroupTemplateBloc bloc;
   final VoidCallback onAddItem;
 
-  void _onRemoveItem(IComponentTemplateBloc item) {
+  void _removeItem(IComponentTemplateBloc item) {
     bloc.inRemoveItem.add(item);
+  }
+
+  void _moveItem(IComponentTemplateBloc item, MoveItemDirection direction) {
+    bloc.inMoveItem.add(
+      new MoveItemRequest(
+        item: item,
+        direction: direction,
+      ),
+    );
   }
 
   @override
@@ -185,7 +186,9 @@ class _GroupTemplateItems extends StatelessWidget {
             children: <Widget>[
               new _GroupItemHeader(
                 componentType: item.type,
-                onRemoveItem: () => _onRemoveItem(item),
+                onRemoveItem: () => _removeItem(item),
+                onMoveItemUp: () => _moveItem(item, MoveItemDirection.up),
+                onMoveItemDown: () => _moveItem(item, MoveItemDirection.down),
               ),
               new ComponentTemplate(
                 bloc: item,
@@ -219,11 +222,17 @@ class _GroupTemplateItems extends StatelessWidget {
 class _GroupItemHeader extends StatelessWidget {
   _GroupItemHeader({
     @required this.componentType,
+    @required this.onMoveItemUp,
+    @required this.onMoveItemDown,
     @required this.onRemoveItem,
   })  : assert(componentType != null),
+        assert(onMoveItemUp != null),
+        assert(onMoveItemDown != null),
         assert(onRemoveItem != null);
 
   final ComponentType componentType;
+  final VoidCallback onMoveItemUp;
+  final VoidCallback onMoveItemDown;
   final VoidCallback onRemoveItem;
 
   @override
@@ -240,6 +249,14 @@ class _GroupItemHeader extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle,
               ),
             ),
+          ),
+          new IconButton(
+            icon: new Icon(Icons.expand_less),
+            onPressed: onMoveItemUp,
+          ),
+          new IconButton(
+            icon: new Icon(Icons.expand_more),
+            onPressed: onMoveItemDown,
           ),
           new IconButton(
             icon: new Icon(Icons.clear),

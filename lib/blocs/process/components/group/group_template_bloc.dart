@@ -10,11 +10,13 @@ import '_group_shared.dart';
 
 class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
   GroupTemplateBloc({
+    bool isExpanded = true,
     @required GroupMold mold,
     @required List<IComponentTemplateBloc> items,
   })  : assert(items != null),
         _items = items,
         super(mold: mold) {
+    _inMoveItemSubject.listen(_onInMoveItem);
     _inAddComponentAtBackSubject.listen(_onInAddComponentAtBack);
     _inRemoveAllItemsSubject.listen(_onInRemoveAllItems);
     _inRemoveItemSubject.listen(_onInRemoveItem);
@@ -33,12 +35,15 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
       _itemsSubject;
 
   // input
+  final _inMoveItemSubject = new PublishSubject<MoveItemRequest>();
   final _inAddComponentAtBackSubject =
       new PublishSubject<IComponentTemplateBloc>();
   final _inRemoveAllItemsSubject = new PublishSubject<Null>();
   final _inRemoveItemSubject = new PublishSubject<IComponentTemplateBloc>();
   final _inCreateInstanceSubject =
       new PublishSubject<Completer<GroupInstance>>();
+
+  Sink<MoveItemRequest> get inMoveItem => _inMoveItemSubject;
 
   Sink<IComponentTemplateBloc> get inAddComponentAtBack =>
       _inAddComponentAtBackSubject;
@@ -52,6 +57,27 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
       _inCreateInstanceSubject;
 
   // input handling
+  Future _onInMoveItem(MoveItemRequest request) async {
+    if (!_items.contains(request.item)) return;
+
+    int oldIndex = _items.indexOf(request.item);
+    int newIndex;
+    switch (request.direction) {
+      case MoveItemDirection.up:
+        newIndex = oldIndex - 1;
+        break;
+      case MoveItemDirection.down:
+        newIndex = oldIndex + 1;
+        break;
+    }
+
+    _items.remove(request.item);
+    newIndex = newIndex.clamp(0, _items.length);
+    _items.insert(newIndex, request.item);
+
+    _updateItemsStream();
+  }
+
   Future _onInAddComponentAtBack(IComponentTemplateBloc data) async {
     _items.add(data);
 
@@ -99,6 +125,7 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
 
     _itemsSubject.close();
 
+    _inMoveItemSubject.close();
     _inAddComponentAtBackSubject.close();
     _inRemoveAllItemsSubject.close();
     _inRemoveItemSubject.close();

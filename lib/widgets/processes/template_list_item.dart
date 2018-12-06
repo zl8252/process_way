@@ -84,6 +84,7 @@ class _TemplateListItemState extends State<TemplateListItem> {
     return new Material(
       color: Colors.red[200],
       child: new AnimatedContainer(
+        padding: new EdgeInsets.only(left: 8, right: 4),
         duration: new Duration(milliseconds: 200),
         height: _isExpanded ? 50.0 : 0.0,
         child: new Row(

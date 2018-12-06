@@ -7,12 +7,20 @@ import 'package:process_way/process_way.dart';
 
 abstract class GroupShared extends ComponentBloc {
   GroupShared({
+    bool isExpanded = true,
     @required this.mold,
-  }) : assert(mold != null) {
+  })  : assert(isExpanded != null),
+        assert(mold != null),
+        _isExpanded = isExpanded {
+    _inToggleIsExpandedSubject.listen(_onInToggleIsExpanded);
     _inTitleSubject.listen(_onInTitle);
 
+    _updateIsExpandedStream();
     _updateTitleStream();
   }
+
+  @protected
+  bool _isExpanded;
 
   @protected
   GroupMold mold;
@@ -21,16 +29,29 @@ abstract class GroupShared extends ComponentBloc {
   ComponentType get type => ComponentType.groupComponent;
 
   // output
+  final _isExpandedSubject = new BehaviorSubject<bool>();
   final _titleSubject = new BehaviorSubject<String>();
+
+  ValueObservable<bool> get isExpanded => _isExpandedSubject;
 
   ValueObservable<String> get title => _titleSubject;
 
   // input
+  final _inToggleIsExpandedSubject = new PublishSubject<Null>();
   final _inTitleSubject = new PublishSubject<String>();
+
+  Sink<Null> get inToggleIsExpanded => _inToggleIsExpandedSubject;
 
   Sink<String> get inTitle => _inTitleSubject;
 
   // input handling
+
+  Future _onInToggleIsExpanded(_) async {
+    _isExpanded = !_isExpanded;
+
+    _updateIsExpandedStream();
+  }
+
   Future _onInTitle(String data) async {
     mold = mold.copyWith(title: data);
 
@@ -38,6 +59,11 @@ abstract class GroupShared extends ComponentBloc {
   }
 
   // --
+
+  void _updateIsExpandedStream() {
+    _isExpandedSubject.add(_isExpanded);
+  }
+
   void _updateTitleStream() {
     _titleSubject.add(mold.title);
   }
@@ -45,8 +71,10 @@ abstract class GroupShared extends ComponentBloc {
   @override
   @mustCallSuper
   void dispose() {
+    _isExpandedSubject.close();
     _titleSubject.close();
 
+    _inToggleIsExpandedSubject.close();
     _inTitleSubject.close();
   }
 }
