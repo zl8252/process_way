@@ -37,6 +37,7 @@ class InfoMold extends ComponentMold {
   InfoCast createCast() {
     return new InfoCast(
       isCompleted: false,
+      instanceName: "$title instance",
     );
   }
 

@@ -17,8 +17,10 @@ class InstanceBloc extends ProcessBloc {
         _cast = cast,
         _rootGroup = rootGroup,
         super(mold: mold) {
+    _inInstanceNameSubject.listen(_onInInstanceName);
     _inIsCompletedSubject.listen(_onInIsCompleted);
 
+    _updateInstanceNameStream();
     _updateIsCompletedStream();
     _updateRootGroupStream();
   }
@@ -30,26 +32,42 @@ class InstanceBloc extends ProcessBloc {
   final GroupInstance _rootGroup;
 
   // output
+  final _instanceNameSubject = new BehaviorSubject<String>();
   final _isCompletedSubject = new BehaviorSubject<bool>();
   final _rootGroupSubject = new BehaviorSubject<GroupInstance>();
+
+  ValueObservable<String> get instanceName => _instanceNameSubject;
 
   ValueObservable<bool> get isCompleted => _isCompletedSubject;
 
   ValueObservable<GroupInstance> get rootGroup => _rootGroupSubject;
 
   // input
+  final _inInstanceNameSubject = new PublishSubject<String>();
   final _inIsCompletedSubject = new PublishSubject<bool>();
+
+  Sink<String> get inInstanceName => _instanceNameSubject;
 
   Sink<bool> get inIsCompleted => _inIsCompletedSubject;
 
   // input handling
+  Future _onInInstanceName(String data) async {
+    _cast = _cast.copyWith(instanceName: data);
+
+    _updateInstanceNameStream();
+  }
+
   Future _onInIsCompleted(bool data) async {
     _cast = _cast.copyWith(isCompleted: data);
 
     _updateIsCompletedStream();
   }
 
-// --
+  // --
+  void _updateInstanceNameStream() {
+    _instanceNameSubject.add(_cast.instanceName);
+  }
+
   void _updateIsCompletedStream() {
     _isCompletedSubject.add(_cast.isCompleted);
   }
@@ -62,9 +80,11 @@ class InstanceBloc extends ProcessBloc {
   void dispose() {
     super.dispose();
 
+    _instanceNameSubject.close();
     _isCompletedSubject.close();
     _rootGroupSubject.close();
 
+    _instanceNameSubject.close();
     _inIsCompletedSubject.close();
   }
 }

@@ -60,7 +60,7 @@ class ProcessesBloc extends BlocBase {
 
   Sink<Null> get inCreateNewTemplate => _inCreateNewTemplateSubject;
 
-  Sink<int> get inCreateInstanceFromTemplate => _inCreateNewTemplateSubject;
+  Sink<int> get inCreateInstanceFromTemplate => _inCreateInstanceFromTemplateSubject;
 
   Sink<LoadInstanceDelegate> get inLoadInstance => _inLoadInstanceSubject;
 

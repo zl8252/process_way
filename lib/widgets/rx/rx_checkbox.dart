@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 class RxCheckbox extends StatelessWidget {
   RxCheckbox({
     @required this.stream,
-    @required this.sink,
-  })  : assert(stream != null),
-        assert(sink != null);
+    this.sink,
+  })  : assert(stream != null);
 
   final Stream<bool> stream;
   final Sink<bool> sink;
@@ -24,7 +23,7 @@ class RxCheckbox extends StatelessWidget {
       builder: (context, snapshot) {
         return new Checkbox(
           value: snapshot.data,
-          onChanged: _onChange,
+          onChanged: sink != null ? _onChange : null,
         );
       },
     );
