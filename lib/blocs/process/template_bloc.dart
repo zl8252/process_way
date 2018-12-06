@@ -9,7 +9,7 @@ class TemplateBloc extends ProcessBloc {
   TemplateBloc({
     @required this.id,
     @required InfoMold mold,
-    @required GroupTemplate rootGroup,
+    @required GroupTemplateBloc rootGroup,
   })  : assert(id != null),
         assert(rootGroup != null),
         _rootGroup = rootGroup,
@@ -21,12 +21,12 @@ class TemplateBloc extends ProcessBloc {
 
   final int id;
 
-  final GroupTemplate _rootGroup;
+  final GroupTemplateBloc _rootGroup;
 
   // output
-  final _rootGroupSubject = new BehaviorSubject<GroupTemplate>();
+  final _rootGroupSubject = new BehaviorSubject<GroupTemplateBloc>();
 
-  ValueObservable<GroupTemplate> get rootGroup => _rootGroupSubject;
+  ValueObservable<GroupTemplateBloc> get rootGroup => _rootGroupSubject;
 
   // input
   final _inCreateInstanceSubject = new PublishSubject<CreateInstanceDelegate>();

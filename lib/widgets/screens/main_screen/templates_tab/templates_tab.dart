@@ -11,21 +11,63 @@ class TemplatesTab extends StatefulWidget {
 
 class _TemplatesTabState extends State<TemplatesTab>
     with AutomaticKeepAliveClientMixin {
+  TemplatesScreenBloc _templatesScreenBloc;
+
   ProcessesBloc get _processesBloc => BlocProvider.of<ProcessesBloc>(context);
 
   @override
   bool get wantKeepAlive => true;
 
   @override
+  void initState() {
+    super.initState();
+
+    _templatesScreenBloc = new TemplatesScreenBloc();
+
+    _templatesScreenBloc.outShowDesignerScreen.listen(_onShowDesignerScreen);
+  }
+
+  @override
+  void dispose() {
+    _templatesScreenBloc.dispose();
+    super.dispose();
+  }
+
+  void _onShowDesignerScreen(ShowDesignerScreenInvoke invoke) {
+    print("Starting designer for template:${invoke.templateId}");
+
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return new DesigningScreen(
+            templateId: invoke.templateId,
+          );
+        },
+      ),
+    );
+  }
+
+  void _createInstanceFromTemplate(int templateId) {
+    _processesBloc.inCreateInstanceFromTemplate.add(templateId);
+  }
+
+  void _designTemplate(int templateId) {
+    _templatesScreenBloc.inStartDesigning.add(
+      new StartDesigningRequest(templateId: templateId),
+    );
+  }
+
+  void _deleteTemplate(int templateId) {
+    _processesBloc.inDeleteTemplate.add(templateId);
+  }
+
+  void _createNewTemplate() {
+    _processesBloc.inCreateNewTemplate.add(null);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    void _onCreateNewTemplate() {
-      _processesBloc.inCreateNewTemplate.add(null);
-    }
-
-    void _onDeleteTemplate(TemplateBloc template) {
-      _processesBloc.inDeleteTemplate.add(template.id);
-    }
-
     return new Stack(
       children: <Widget>[
         new StreamBuilder<UnmodifiableListView<TemplateBloc>>(
@@ -40,11 +82,10 @@ class _TemplatesTabState extends State<TemplatesTab>
                 return new TemplateListItem(
                   key: new ObjectKey(template),
                   template: template,
-                  onCreateInstance: () {},
-                  onEdit: () {},
-                  onDelete: () {
-                    _onDeleteTemplate(template);
-                  },
+                  onCreateInstance: () =>
+                      _createInstanceFromTemplate(template.id),
+                  onDesign: () => _designTemplate(template.id),
+                  onDelete: () => _deleteTemplate(template.id),
                 );
               },
             );
@@ -55,7 +96,7 @@ class _TemplatesTabState extends State<TemplatesTab>
           right: kFloatingActionButtonMargin,
           child: new FloatingActionButton(
             child: new Icon(Icons.add),
-            onPressed: _onCreateNewTemplate,
+            onPressed: _createNewTemplate,
           ),
         ),
       ],

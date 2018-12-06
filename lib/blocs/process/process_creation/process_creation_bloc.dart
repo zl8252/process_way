@@ -39,12 +39,11 @@ class ProcessCreationBloc extends BlocBase {
         );
         break;
       case ComponentType.infoComponent:
+        delegate.completer.completeError(new ArgumentError(
+          "Creation of component template of desired type is not implemented",
+        ));
         break;
     }
-
-    delegate.completer.completeError(new ArgumentError(
-      "Creation of component template of desired type is not implemented",
-    ));
   }
 
   Future _onInCreateTemplate(CreateTemplateDelegate delegate) async {
@@ -54,7 +53,7 @@ class ProcessCreationBloc extends BlocBase {
         title: "Template",
         details: new Optional.absent(),
       ),
-      rootGroup: new GroupTemplate(
+      rootGroup: new GroupTemplateBloc(
         mold: new GroupMold(title: "Root Group"),
         items: [],
       ),
@@ -65,8 +64,8 @@ class ProcessCreationBloc extends BlocBase {
 
   // --
   @visibleForTesting
-  CheckboxTemplate createCheckboxTemplate() {
-    return new CheckboxTemplate(
+  CheckboxTemplateBloc createCheckboxTemplate() {
+    return new CheckboxTemplateBloc(
       mold: new CheckboxMold(
         initialValue: false,
         title: "Checkbox",
@@ -76,8 +75,8 @@ class ProcessCreationBloc extends BlocBase {
   }
 
   @visibleForTesting
-  GroupTemplate createGroupTemplate() {
-    return new GroupTemplate(
+  GroupTemplateBloc createGroupTemplate() {
+    return new GroupTemplateBloc(
       mold: new GroupMold(title: "Group"),
       items: [],
     );

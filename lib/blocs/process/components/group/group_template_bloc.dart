@@ -8,53 +8,64 @@ import 'package:process_way/process_way.dart';
 
 import '_group_shared.dart';
 
-class GroupTemplate extends GroupShared implements IComponentTemplate {
-  GroupTemplate({
+class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
+  GroupTemplateBloc({
     @required GroupMold mold,
-    @required List<IComponentTemplate> items,
+    @required List<IComponentTemplateBloc> items,
   })  : assert(items != null),
         _items = items,
         super(mold: mold) {
     _inAddComponentAtBackSubject.listen(_onInAddComponentAtBack);
-    _inRemoveAllComponentsSubject.listen(_onInRemoveAllComponents);
+    _inRemoveAllItemsSubject.listen(_onInRemoveAllItems);
+    _inRemoveItemSubject.listen(_onInRemoveItem);
     _inCreateInstanceSubject.listen(_onInCreateInstance);
 
     _updateItemsStream();
   }
 
-  List<IComponentTemplate> _items;
+  List<IComponentTemplateBloc> _items;
 
   // output
   final _itemsSubject =
-      new BehaviorSubject<UnmodifiableListView<IComponentTemplate>>();
+      new BehaviorSubject<UnmodifiableListView<IComponentTemplateBloc>>();
 
-  ValueObservable<UnmodifiableListView<IComponentTemplate>> get items =>
+  ValueObservable<UnmodifiableListView<IComponentTemplateBloc>> get items =>
       _itemsSubject;
 
   // input
-  final _inAddComponentAtBackSubject = new PublishSubject<IComponentTemplate>();
-  final _inRemoveAllComponentsSubject = new PublishSubject<Null>();
+  final _inAddComponentAtBackSubject =
+      new PublishSubject<IComponentTemplateBloc>();
+  final _inRemoveAllItemsSubject = new PublishSubject<Null>();
+  final _inRemoveItemSubject = new PublishSubject<IComponentTemplateBloc>();
   final _inCreateInstanceSubject =
       new PublishSubject<Completer<GroupInstance>>();
 
-  Sink<IComponentTemplate> get inAddComponentAtBack =>
+  Sink<IComponentTemplateBloc> get inAddComponentAtBack =>
       _inAddComponentAtBackSubject;
 
-  Sink<Null> get inRemoveAllComponents => _inRemoveAllComponentsSubject;
+  Sink<Null> get inRemoveAllItems => _inRemoveAllItemsSubject;
+
+  Sink<IComponentTemplateBloc> get inRemoveItem => _inRemoveItemSubject;
 
   @override
   Sink<Completer<GroupInstance>> get inCreateInstance =>
       _inCreateInstanceSubject;
 
   // input handling
-  Future _onInAddComponentAtBack(IComponentTemplate data) async {
+  Future _onInAddComponentAtBack(IComponentTemplateBloc data) async {
     _items.add(data);
 
     _updateItemsStream();
   }
 
-  Future _onInRemoveAllComponents(_) async {
+  Future _onInRemoveAllItems(_) async {
     _items.clear();
+
+    _updateItemsStream();
+  }
+
+  Future _onInRemoveItem(IComponentTemplateBloc item) async {
+    _items.remove(item);
 
     _updateItemsStream();
   }
@@ -89,7 +100,8 @@ class GroupTemplate extends GroupShared implements IComponentTemplate {
     _itemsSubject.close();
 
     _inAddComponentAtBackSubject.close();
-    _inRemoveAllComponentsSubject.close();
+    _inRemoveAllItemsSubject.close();
+    _inRemoveItemSubject.close();
     _inCreateInstanceSubject.close();
   }
 }

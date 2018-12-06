@@ -8,18 +8,18 @@ class TemplateListItem extends StatefulWidget {
     Key key,
     @required this.template,
     @required this.onCreateInstance,
-    @required this.onEdit,
+    @required this.onDesign,
     @required this.onDelete,
   })  : assert(template != null),
         assert(onCreateInstance != null),
-        assert(onEdit != null),
+        assert(onDesign != null),
         assert(onDelete != null),
         super(key: key);
 
   final TemplateBloc template;
 
   final VoidCallback onCreateInstance;
-  final VoidCallback onEdit;
+  final VoidCallback onDesign;
   final VoidCallback onDelete;
 
   @override
@@ -46,6 +46,7 @@ class _TemplateListItemState extends State<TemplateListItem> {
       },
       child: new Card(
         clipBehavior: Clip.antiAlias,
+        elevation: 2,
         child: new Column(
           children: <Widget>[
             new Container(
@@ -98,7 +99,7 @@ class _TemplateListItemState extends State<TemplateListItem> {
               icon: new Icon(
                 Icons.edit,
               ),
-              onPressed: widget.onEdit,
+              onPressed: widget.onDesign,
             ),
             new IconButton(
               icon: new Icon(Icons.clear),

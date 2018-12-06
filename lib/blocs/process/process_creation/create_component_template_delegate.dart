@@ -14,5 +14,5 @@ class CreateComponentTemplateDelegate {
 
   final ComponentType componentType;
 
-  final Completer<IComponentTemplate> completer;
+  final Completer<IComponentTemplateBloc> completer;
 }

@@ -16,7 +16,7 @@ class DesigningScreenBloc extends BlocBase {
         _templateId = templateId,
         _processesBloc = processesBloc,
         _processCreationBloc = processCreationBloc {
-    _inAddNewComponentToGroupSubject.listen(_onInAddNewComponentToGroup);
+    _inAddNewItemToGroupSubject.listen(_onInAddNewItemToGroup);
     _inSaveAndDismissScreenSubject.listen(_onInSaveAndDismissScreen);
 
     _loadTemplate();
@@ -42,18 +42,18 @@ class DesigningScreenBloc extends BlocBase {
   Observable<Null> get outDismissScreen => _outDismissScreenSubject;
 
   // input
-  final _inAddNewComponentToGroupSubject =
-      new BehaviorSubject<AddNewComponentToGroupRequest>();
+  final _inAddNewItemToGroupSubject =
+      new BehaviorSubject<AddNewItemToGroupRequest>();
   final _inSaveAndDismissScreenSubject = new BehaviorSubject<Null>();
 
-  Sink<AddNewComponentToGroupRequest> get inAddNewComponentToGroup =>
-      _inAddNewComponentToGroupSubject;
+  Sink<AddNewItemToGroupRequest> get inAddNewItemToGroup =>
+      _inAddNewItemToGroupSubject;
 
   Sink<Null> get inSaveAndDismissScreen => _inSaveAndDismissScreenSubject;
 
   // input handling
-  Future _onInAddNewComponentToGroup(
-    AddNewComponentToGroupRequest request,
+  Future _onInAddNewItemToGroup(
+    AddNewItemToGroupRequest request,
   ) async {
     // pick component type
     Completer<ComponentType> componentTypeCompleter = new Completer();
@@ -61,16 +61,19 @@ class DesigningScreenBloc extends BlocBase {
       new PickComponentTypeInvoke(completer: componentTypeCompleter),
     );
     ComponentType componentType = await componentTypeCompleter.future;
+    if (componentType == null){
+      return;
+    }
 
     // create the component
-    Completer<IComponentTemplate> componentCompleter = new Completer();
+    Completer<IComponentTemplateBloc> componentCompleter = new Completer();
     _processCreationBloc.inCreateComponentTemplate.add(
       new CreateComponentTemplateDelegate(
         componentType: componentType,
         completer: componentCompleter,
       ),
     );
-    IComponentTemplate component = await componentCompleter.future;
+    IComponentTemplateBloc component = await componentCompleter.future;
 
     // add component to group
     request.group.inAddComponentAtBack.add(component);
@@ -113,7 +116,7 @@ class DesigningScreenBloc extends BlocBase {
     _outPickComponentTypeSubject.close();
     _outDismissScreenSubject.close();
 
-    _inAddNewComponentToGroupSubject.close();
+    _inAddNewItemToGroupSubject.close();
     _inSaveAndDismissScreenSubject.close();
   }
 }
