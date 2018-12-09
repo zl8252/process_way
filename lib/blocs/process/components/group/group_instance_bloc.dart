@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:collection';
 
 import 'package:meta/meta.dart';
@@ -8,11 +7,11 @@ import 'package:process_way/process_way.dart';
 
 import '_group_shared.dart';
 
-class GroupInstance extends GroupShared implements IComponentInstance {
-  GroupInstance({
+class GroupInstanceBloc extends GroupShared implements IComponentInstanceBloc {
+  GroupInstanceBloc({
     @required GroupMold mold,
     @required GroupCast cast,
-    @required List<IComponentInstance> items,
+    @required List<IComponentInstanceBloc> items,
   })  : assert(cast != null),
         assert(items != null),
         _cast = cast,
@@ -23,13 +22,13 @@ class GroupInstance extends GroupShared implements IComponentInstance {
 
   GroupCast _cast;
 
-  List<IComponentInstance> _items;
+  List<IComponentInstanceBloc> _items;
 
   // output
   final _itemsSubject =
-      new BehaviorSubject<UnmodifiableListView<IComponentInstance>>();
+      new BehaviorSubject<UnmodifiableListView<IComponentInstanceBloc>>();
 
-  ValueObservable<UnmodifiableListView<IComponentInstance>> get items =>
+  ValueObservable<UnmodifiableListView<IComponentInstanceBloc>> get items =>
       _itemsSubject;
 
   // --

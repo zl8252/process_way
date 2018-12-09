@@ -6,7 +6,8 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:process_way/process_way.dart';
 
-class CheckboxTemplateBloc extends ComponentBloc implements IComponentTemplateBloc {
+class CheckboxTemplateBloc extends ComponentBloc
+    implements IComponentTemplateBloc {
   CheckboxTemplateBloc({
     @required CheckboxMold mold,
   })  : assert(mold != null),
@@ -42,7 +43,7 @@ class CheckboxTemplateBloc extends ComponentBloc implements IComponentTemplateBl
   final _inTitleSubject = new PublishSubject<String>();
   final _inSubtitleSubject = new PublishSubject<Optional<String>>();
   final _inCreateInstanceSubject =
-      new PublishSubject<Completer<CheckboxInstance>>();
+      new PublishSubject<Completer<IComponentInstanceBloc>>();
 
   Sink<bool> get inInitialValue => _inInitialValueSubject;
 
@@ -51,7 +52,7 @@ class CheckboxTemplateBloc extends ComponentBloc implements IComponentTemplateBl
   Sink<Optional<String>> get inSubtitle => _inSubtitleSubject;
 
   @override
-  Sink<Completer<CheckboxInstance>> get inCreateInstance =>
+  Sink<Completer<IComponentInstanceBloc>> get inCreateInstance =>
       _inCreateInstanceSubject;
 
   // input handling
@@ -73,8 +74,8 @@ class CheckboxTemplateBloc extends ComponentBloc implements IComponentTemplateBl
     _updateSubtitleStream();
   }
 
-  Future _onInCreateInstance(Completer<CheckboxTemplateBloc> completer) async {
-    CheckboxInstance instance = new CheckboxInstance(
+  Future _onInCreateInstance(Completer completer) async {
+    CheckboxInstanceBloc instance = new CheckboxInstanceBloc(
       mold: _mold,
       cast: _mold.createCast(),
     );

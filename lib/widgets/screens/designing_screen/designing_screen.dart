@@ -75,7 +75,7 @@ class _DesigningScreenState extends State<DesigningScreen> {
 
             return new Column(
               children: <Widget>[
-                new EditableTemplateInfo(
+                new TemplateInfoHeader(
                   template: snapshot.data,
                 ),
                 new Expanded(

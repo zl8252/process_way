@@ -41,7 +41,7 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
   final _inRemoveAllItemsSubject = new PublishSubject<Null>();
   final _inRemoveItemSubject = new PublishSubject<IComponentTemplateBloc>();
   final _inCreateInstanceSubject =
-      new PublishSubject<Completer<GroupInstance>>();
+      new PublishSubject<Completer<IComponentInstanceBloc>>();
 
   Sink<MoveItemRequest> get inMoveItem => _inMoveItemSubject;
 
@@ -53,7 +53,7 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
   Sink<IComponentTemplateBloc> get inRemoveItem => _inRemoveItemSubject;
 
   @override
-  Sink<Completer<GroupInstance>> get inCreateInstance =>
+  Sink<Completer<IComponentInstanceBloc>> get inCreateInstance =>
       _inCreateInstanceSubject;
 
   // input handling
@@ -96,17 +96,20 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
     _updateItemsStream();
   }
 
-  Future _onInCreateInstance(Completer<GroupInstance> completer) async {
-    GroupInstance instance = new GroupInstance(
+  Future _onInCreateInstance(Completer completer) async {
+    List<Future<IComponentInstanceBloc>> itemsInstancesFutures =
+        _items.map<Future<IComponentInstanceBloc>>(
+      (itemTemplate) {
+        Completer<IComponentInstanceBloc> completer = new Completer();
+        itemTemplate.inCreateInstance.add(completer);
+        return completer.future;
+      },
+    ).toList();
+
+    GroupInstanceBloc instance = new GroupInstanceBloc(
       mold: mold,
       cast: mold.createCast(),
-      items: await Future.wait(_items.map(
-        (item) {
-          Completer<IComponentInstance> c = new Completer();
-          item.inCreateInstance.add(c);
-          return c.future;
-        },
-      ).toList()),
+      items: await Future.wait<IComponentInstanceBloc>(itemsInstancesFutures),
     );
 
     completer.complete(instance);

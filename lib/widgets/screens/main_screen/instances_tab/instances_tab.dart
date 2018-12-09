@@ -23,6 +23,8 @@ class _InstancesTabState extends State<InstancesTab>
     super.initState();
 
     _instancesScreenBloc = new InstancesScreenBloc();
+
+    _instancesScreenBloc.outShowRunnerScreen.listen(_onOutShowRunnerScreen);
   }
 
   @override
@@ -30,6 +32,25 @@ class _InstancesTabState extends State<InstancesTab>
     _instancesScreenBloc.dispose();
 
     super.dispose();
+  }
+
+  void _onOutShowRunnerScreen(ShowRunnerScreenInvoke invoke) {
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return new RunningScreen(
+            instanceId: invoke.instanceId,
+          );
+        },
+      ),
+    );
+  }
+
+  void _runInstance(InstanceBloc instance) {
+    _instancesScreenBloc.inStartRunning.add(
+      new StartRunningRequest(instanceId: instance.id),
+    );
   }
 
   void _deleteInstance(InstanceBloc instance) {
@@ -50,7 +71,9 @@ class _InstancesTabState extends State<InstancesTab>
               InstanceBloc instance = snapshot.data[index];
 
               return new InstanceListItem(
+                key: new ObjectKey(instance),
                 bloc: instance,
+                onRun: () => _runInstance(instance),
                 onDelete: () => _deleteInstance(instance),
               );
             },

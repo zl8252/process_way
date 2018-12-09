@@ -5,8 +5,8 @@ import 'package:rx_widgets/rx_widgets.dart';
 
 import 'package:process_way/process_way.dart';
 
-class EditableTemplateInfo extends StatelessWidget {
-  EditableTemplateInfo({
+class TemplateInfoHeader extends StatelessWidget {
+  TemplateInfoHeader({
     @required this.template,
   }) : assert(template != null);
 

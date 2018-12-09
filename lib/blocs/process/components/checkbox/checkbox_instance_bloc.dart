@@ -5,8 +5,9 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:process_way/process_way.dart';
 
-class CheckboxInstance extends CheckboxTemplateBloc implements IComponentInstance {
-  CheckboxInstance({
+class CheckboxInstanceBloc extends CheckboxTemplateBloc
+    implements IComponentInstanceBloc {
+  CheckboxInstanceBloc({
     @required CheckboxMold mold,
     @required CheckboxCast cast,
   })  : assert(cast != null),

@@ -10,7 +10,7 @@ class InstanceBloc extends ProcessBloc {
     @required this.id,
     @required InfoMold mold,
     @required InfoCast cast,
-    @required GroupInstance rootGroup,
+    @required GroupInstanceBloc rootGroup,
   })  : assert(id != null),
         assert(cast != null),
         assert(rootGroup != null),
@@ -29,18 +29,18 @@ class InstanceBloc extends ProcessBloc {
 
   InfoCast _cast;
 
-  final GroupInstance _rootGroup;
+  final GroupInstanceBloc _rootGroup;
 
   // output
   final _instanceNameSubject = new BehaviorSubject<String>();
   final _isCompletedSubject = new BehaviorSubject<bool>();
-  final _rootGroupSubject = new BehaviorSubject<GroupInstance>();
+  final _rootGroupSubject = new BehaviorSubject<GroupInstanceBloc>();
 
   ValueObservable<String> get instanceName => _instanceNameSubject;
 
   ValueObservable<bool> get isCompleted => _isCompletedSubject;
 
-  ValueObservable<GroupInstance> get rootGroup => _rootGroupSubject;
+  ValueObservable<GroupInstanceBloc> get rootGroup => _rootGroupSubject;
 
   // input
   final _inInstanceNameSubject = new PublishSubject<String>();

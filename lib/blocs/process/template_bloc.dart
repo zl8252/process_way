@@ -35,7 +35,7 @@ class TemplateBloc extends ProcessBloc {
 
   // input handling
   Future _onInCreateInstance(CreateInstanceDelegate delegate) async {
-    Completer<GroupInstance> rootGroupCompleter = new Completer();
+    Completer<GroupInstanceBloc> rootGroupCompleter = new Completer();
     _rootGroup.inCreateInstance.add(rootGroupCompleter);
 
     InstanceBloc instance = new InstanceBloc(

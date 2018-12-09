@@ -3,20 +3,20 @@ import 'package:meta/meta.dart';
 
 import 'package:process_way/process_way.dart';
 
-class ComponentTemplate extends StatelessWidget {
-  ComponentTemplate({
+class ComponentInstance extends StatelessWidget {
+  ComponentInstance({
     @required this.bloc,
   }) : assert(bloc != null);
 
-  final IComponentTemplateBloc bloc;
+  final IComponentInstanceBloc bloc;
 
   @override
   Widget build(BuildContext context) {
     switch (bloc.type) {
       case ComponentType.checkboxComponent:
-        return new CheckboxTemplate(bloc: bloc);
+        return new CheckboxInstance(bloc: bloc);
       case ComponentType.groupComponent:
-        return new GroupTemplate(bloc: bloc);
+        return new GroupInstance(bloc: bloc);
       case ComponentType.infoComponent:
         break;
     }

@@ -41,12 +41,16 @@ class ProcessesBloc extends BlocBase {
       new BehaviorSubject<UnmodifiableListView<InstanceBloc>>();
   final _templatesSubject =
       new BehaviorSubject<UnmodifiableListView<TemplateBloc>>();
+  final _outInstanceCreatedNotificationSubject = new BehaviorSubject<Null>();
 
   Observable<UnmodifiableListView<InstanceBloc>> get instances =>
       _instancesSubject;
 
   Observable<UnmodifiableListView<TemplateBloc>> get templates =>
       _templatesSubject;
+
+  Observable<Null> get outInstanceCreatedNotification =>
+      _outInstanceCreatedNotificationSubject;
 
   // input
   final _inCreateNewTemplateSubject = new PublishSubject<Null>();
@@ -60,7 +64,8 @@ class ProcessesBloc extends BlocBase {
 
   Sink<Null> get inCreateNewTemplate => _inCreateNewTemplateSubject;
 
-  Sink<int> get inCreateInstanceFromTemplate => _inCreateInstanceFromTemplateSubject;
+  Sink<int> get inCreateInstanceFromTemplate =>
+      _inCreateInstanceFromTemplateSubject;
 
   Sink<LoadInstanceDelegate> get inLoadInstance => _inLoadInstanceSubject;
 
@@ -108,9 +113,10 @@ class ProcessesBloc extends BlocBase {
 
     InstanceBloc instance = await instanceCompleter.future;
 
-    _instancesRepository.saveInstance(instance);
+    await _instancesRepository.saveInstance(instance);
 
     _updateInstancesStream();
+    _outInstanceCreatedNotificationSubject.add(null);
   }
 
   Future _onInLoadInstance(LoadInstanceDelegate delegate) async {
@@ -178,6 +184,7 @@ class ProcessesBloc extends BlocBase {
   void dispose() {
     _instancesSubject.close();
     _templatesSubject.close();
+    _outInstanceCreatedNotificationSubject.close();
 
     _inCreateNewTemplateSubject.close();
     _inCreateInstanceFromTemplateSubject.close();

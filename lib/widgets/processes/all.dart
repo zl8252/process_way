@@ -1,6 +1,10 @@
+export 'checkbox_instance.dart';
 export 'checkbox_template.dart';
+export 'component_instance.dart';
 export 'component_template.dart';
-export 'editable_template_info.dart';
+export 'template_info_header.dart';
+export 'group_instance.dart';
 export 'group_template.dart';
+export 'instance_info_header.dart';
 export 'instance_list_item.dart';
 export 'template_list_item.dart';

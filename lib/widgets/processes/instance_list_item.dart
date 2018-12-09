@@ -5,12 +5,17 @@ import 'package:process_way/process_way.dart';
 
 class InstanceListItem extends StatelessWidget {
   InstanceListItem({
+    Key key,
     @required this.bloc,
+    @required this.onRun,
     @required this.onDelete,
   })  : assert(bloc != null),
-        assert(onDelete != null);
+        assert(onRun != null),
+        assert(onDelete != null),
+        super(key: key);
 
   final InstanceBloc bloc;
+  final VoidCallback onRun;
   final VoidCallback onDelete;
 
   @override
@@ -25,6 +30,10 @@ class InstanceListItem extends StatelessWidget {
             padding: new EdgeInsets.symmetric(vertical: 8),
             child: new Row(
               children: <Widget>[
+                new IconButton(
+                  icon: new Icon(Icons.play_arrow),
+                  onPressed: onRun,
+                ),
                 new Expanded(
                   child: new Center(
                     child: new RxText(
