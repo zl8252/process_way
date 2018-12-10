@@ -2,11 +2,6 @@ import 'package:meta/meta.dart';
 
 import 'package:process_way/process_way.dart';
 
-enum MoveItemDirection {
-  up,
-  down,
-}
-
 @immutable
 class MoveItemRequest {
   MoveItemRequest({

@@ -74,6 +74,17 @@ class _TemplatesTabState extends State<TemplatesTab>
           initialData: new UnmodifiableListView([]),
           stream: _processesBloc.templates,
           builder: (context, snapshot) {
+            if (snapshot.data.length == 0) {
+              return new Center(
+                child: new Text(
+                  "No Tenplates",
+                  style: Theme.of(context).textTheme.title.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
+              );
+            }
+
             return new ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {

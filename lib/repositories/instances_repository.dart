@@ -9,6 +9,13 @@ class InstancesRepository {
     return _instances.values.toList();
   }
 
+  Future<Null> replaceWithNewInstances(List<InstanceBloc> instances) async {
+    _instances.clear();
+    for (final instance in instances){
+      await saveInstance(instance);
+    }
+  }
+
   Future<InstanceBloc> loadInstanceById(int instanceId) async {
     if (!_instances.containsKey(instanceId)) {
       throw new Exception(

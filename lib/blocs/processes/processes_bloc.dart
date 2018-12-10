@@ -20,6 +20,7 @@ class ProcessesBloc extends BlocBase {
     _inCreateNewTemplateSubject.listen(_onInCreateNewTemplate);
     _inCreateInstanceFromTemplateSubject
         .listen(_onInCreateInstanceFromTemplate);
+    _inMoveInstanceSubject.listen(_onInMoveInstance);
     _inLoadInstanceSubject.listen(_onInLoadInstance);
     _inLoadTemplateSubject.listen(_onInLoadTemplate);
     _inSaveInstanceSubject.listen(_onInSaveInstance);
@@ -55,6 +56,7 @@ class ProcessesBloc extends BlocBase {
   // input
   final _inCreateNewTemplateSubject = new PublishSubject<Null>();
   final _inCreateInstanceFromTemplateSubject = new PublishSubject<int>();
+  final _inMoveInstanceSubject = new PublishSubject<MoveInstanceRequest>();
   final _inLoadInstanceSubject = new PublishSubject<LoadInstanceDelegate>();
   final _inLoadTemplateSubject = new PublishSubject<LoadTemplateDelegate>();
   final _inSaveInstanceSubject = new PublishSubject<InstanceBloc>();
@@ -66,6 +68,8 @@ class ProcessesBloc extends BlocBase {
 
   Sink<int> get inCreateInstanceFromTemplate =>
       _inCreateInstanceFromTemplateSubject;
+
+  Sink<MoveInstanceRequest> get inMoveInstance => _inMoveInstanceSubject;
 
   Sink<LoadInstanceDelegate> get inLoadInstance => _inLoadInstanceSubject;
 
@@ -117,6 +121,30 @@ class ProcessesBloc extends BlocBase {
 
     _updateInstancesStream();
     _outInstanceCreatedNotificationSubject.add(null);
+  }
+
+  Future _onInMoveInstance(MoveInstanceRequest request) async {
+    List<InstanceBloc> instances =
+        await _instancesRepository.loadAllInstances();
+
+    if (!instances.contains(request.instance)) return;
+
+    int initialIndex = instances.indexOf(request.instance);
+    int newIndex;
+    switch (request.direction) {
+      case MoveItemDirection.up:
+        newIndex = initialIndex - 1;
+        break;
+      case MoveItemDirection.down:
+        newIndex = initialIndex + 1;
+        break;
+    }
+    instances.remove(request.instance);
+    newIndex = newIndex.clamp(0, instances.length);
+    instances.insert(newIndex, request.instance);
+    await _instancesRepository.replaceWithNewInstances(instances);
+
+    _updateInstancesStream();
   }
 
   Future _onInLoadInstance(LoadInstanceDelegate delegate) async {
@@ -188,6 +216,7 @@ class ProcessesBloc extends BlocBase {
 
     _inCreateNewTemplateSubject.close();
     _inCreateInstanceFromTemplateSubject.close();
+    _inMoveInstanceSubject.close();
     _inLoadInstanceSubject.close();
     _inLoadTemplateSubject.close();
     _inSaveInstanceSubject.close();

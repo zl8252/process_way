@@ -1,0 +1,4 @@
+enum MoveItemDirection {
+  up,
+  down,
+}

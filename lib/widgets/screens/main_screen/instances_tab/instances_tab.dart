@@ -57,6 +57,24 @@ class _InstancesTabState extends State<InstancesTab>
     _processesBloc.inDeleteInstance.add(instance.id);
   }
 
+  void _moveInstanceUp(InstanceBloc instance) {
+    _processesBloc.inMoveInstance.add(
+      new MoveInstanceRequest(
+        direction: MoveItemDirection.up,
+        instance: instance,
+      ),
+    );
+  }
+
+  void _moveInstanceDown(InstanceBloc instance) {
+    _processesBloc.inMoveInstance.add(
+      new MoveInstanceRequest(
+        direction: MoveItemDirection.down,
+        instance: instance,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new BlocProvider<InstancesScreenBloc>(
@@ -65,6 +83,17 @@ class _InstancesTabState extends State<InstancesTab>
         initialData: new UnmodifiableListView([]),
         stream: _processesBloc.instances,
         builder: (context, snapshot) {
+          if (snapshot.data.length == 0) {
+            return new Center(
+              child: new Text(
+                "No Instances",
+                style: Theme.of(context).textTheme.title.copyWith(
+                      color: Colors.grey,
+                    ),
+              ),
+            );
+          }
+
           return new ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
@@ -75,6 +104,8 @@ class _InstancesTabState extends State<InstancesTab>
                 bloc: instance,
                 onRun: () => _runInstance(instance),
                 onDelete: () => _deleteInstance(instance),
+                onMoveUp: () => _moveInstanceUp(instance),
+                onMoveDown: () => _moveInstanceDown(instance),
               );
             },
           );
