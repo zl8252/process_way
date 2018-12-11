@@ -235,6 +235,7 @@ class ProcessesBloc extends BlocBase {
   Future _onInDeleteInstance(int instanceId) async {
     _instancesRepository.deleteInstanceWithId(instanceId);
 
+    _onInSaveInstancesToStorage(null);
     _updateInstancesStream();
   }
 

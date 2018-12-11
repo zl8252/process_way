@@ -13,22 +13,39 @@ class ComponentTypePickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return new AlertDialog(
       title: new Text("Pick Component Type"),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          new ListTile(
-            title: new Text(
-              Strings.componentTypeToString(ComponentType.checkboxComponent),
+      content: new SingleChildScrollView(
+        child: new Column(
+          children: <Widget>[
+            new ListTile(
+              title: new Text(
+                Strings.componentTypeToString(ComponentType.checkboxComponent),
+              ),
+              onTap: () =>
+                  onComponentTypePicked(ComponentType.checkboxComponent),
             ),
-            onTap: () => onComponentTypePicked(ComponentType.checkboxComponent),
-          ),
-          new ListTile(
-            title: new Text(
-              Strings.componentTypeToString(ComponentType.groupComponent),
+            new ListTile(
+              title: new Text(
+                  Strings.componentTypeToString(ComponentType.groupComponent)),
+              onTap: () => onComponentTypePicked(ComponentType.groupComponent),
             ),
-            onTap: () => onComponentTypePicked(ComponentType.groupComponent),
-          )
-        ],
+            new ListTile(
+              title:
+                  new Text(Strings.componentTypeToString(ComponentType.number)),
+              onTap: () => onComponentTypePicked(ComponentType.number),
+            ),
+            new ListTile(
+              title: new Text(
+                Strings.componentTypeToString(ComponentType.text),
+              ),
+              onTap: () => onComponentTypePicked(ComponentType.text),
+            ),
+            new ListTile(
+              title: new Text(
+                  Strings.componentTypeToString(ComponentType.textBox)),
+              onTap: () => onComponentTypePicked(ComponentType.textBox),
+            ),
+          ],
+        ),
       ),
     );
   }

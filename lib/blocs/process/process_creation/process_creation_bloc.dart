@@ -38,6 +38,21 @@ class ProcessCreationBloc extends BlocBase {
           createGroupTemplate(),
         );
         break;
+      case ComponentType.number:
+        delegate.completer.complete(
+          createNumberTemplate(),
+        );
+        break;
+      case ComponentType.text:
+        delegate.completer.complete(
+          createTextTemplate(),
+        );
+        break;
+      case ComponentType.textBox:
+        delegate.completer.complete(
+          createTextBoxTemplate(),
+        );
+        break;
       case ComponentType.infoComponent:
         delegate.completer.completeError(new ArgumentError(
           "Creation of component template of desired type is not implemented",
@@ -79,6 +94,30 @@ class ProcessCreationBloc extends BlocBase {
     return new GroupTemplateBloc(
       mold: new GroupMold(title: "Group"),
       items: [],
+    );
+  }
+
+  @visibleForTesting
+  NumberTemplateBloc createNumberTemplate() {
+    return new NumberTemplateBloc(
+      mold: new NumberMold(label: "Number"),
+    );
+  }
+
+  @visibleForTesting
+  TextTemplateBloc createTextTemplate() {
+    return new TextTemplateBloc(
+      mold: new TextMold(text: "Text"),
+    );
+  }
+
+  @visibleForTesting
+  TextBoxTemplateBloc createTextBoxTemplate() {
+    return new TextBoxTemplateBloc(
+      mold: new TextBoxMold(
+        title: "Title",
+        hint: new Optional.absent(),
+      ),
     );
   }
 

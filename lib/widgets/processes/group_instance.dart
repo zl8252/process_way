@@ -33,7 +33,10 @@ class GroupInstance extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.data) return new Container();
 
-          return new _GroupInstanceItems(bloc: bloc);
+          return new _GroupInstanceItems(
+            bloc: bloc,
+            padLeft: showHeader,
+          );
         },
       ),
     );
@@ -82,32 +85,25 @@ class _GroupInstanceHeader extends StatelessWidget {
 class _GroupInstanceItems extends StatelessWidget {
   _GroupInstanceItems({
     @required this.bloc,
-  }) : assert(bloc != null);
+    this.padLeft = true,
+  })  : assert(bloc != null),
+        assert(padLeft != null);
 
   final GroupInstanceBloc bloc;
 
+  final bool padLeft;
+
   @override
   Widget build(BuildContext context) {
-    return new IntrinsicHeight(
-      child: new Row(
-        children: <Widget>[
-          _buildIndicationLine(),
-          new Expanded(
-            child: _buildItems(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIndicationLine() {
-    return new Container(
-      padding: new EdgeInsets.symmetric(horizontal: 8),
-      child: new Container(
-        width: 2,
-        height: double.infinity,
-        color: Colors.grey,
-      ),
+    return new Row(
+      children: <Widget>[
+        new Container(
+          width: padLeft ? 16 : 0,
+        ),
+        new Expanded(
+          child: _buildItems(),
+        ),
+      ],
     );
   }
 

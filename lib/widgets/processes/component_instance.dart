@@ -19,6 +19,12 @@ class ComponentInstance extends StatelessWidget {
         return new CheckboxInstance(bloc: bloc);
       case ComponentType.groupComponent:
         return new GroupInstance(bloc: bloc);
+      case ComponentType.number:
+        return new NumberInstance(bloc: bloc);
+      case ComponentType.text:
+        return new TextInstance(bloc: bloc);
+      case ComponentType.textBox:
+        return new TextBoxInstance(bloc: bloc);
       case ComponentType.infoComponent:
         break;
     }

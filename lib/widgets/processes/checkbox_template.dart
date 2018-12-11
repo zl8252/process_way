@@ -13,7 +13,6 @@ class CheckboxTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Material(
-//      color: Colors.grey[100],
       child: new Row(
         children: <Widget>[
           new Expanded(

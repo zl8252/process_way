@@ -12,6 +12,7 @@ class RxEditableText extends StatefulWidget {
     this.style,
     this.decoration,
     this.maxLines,
+    this.textAlign = TextAlign.start,
   })  : optionalStream = null,
         optionalSink = null,
         assert(stream != null),
@@ -23,6 +24,7 @@ class RxEditableText extends StatefulWidget {
     this.style,
     this.decoration,
     this.maxLines,
+    this.textAlign = TextAlign.start,
   })  : stream = null,
         sink = null,
         assert(optionalStream != null),
@@ -37,6 +39,7 @@ class RxEditableText extends StatefulWidget {
   final TextStyle style;
   final InputDecoration decoration;
   final int maxLines;
+  final TextAlign textAlign;
 
   @override
   _RxEditableTextState createState() => _RxEditableTextState();
@@ -113,6 +116,7 @@ class _RxEditableTextState extends State<RxEditableText> {
       style: widget.style,
       decoration: widget.decoration,
       maxLines: widget.maxLines,
+      textAlign: widget.textAlign,
       onChanged: _onTextChanged,
     );
   }

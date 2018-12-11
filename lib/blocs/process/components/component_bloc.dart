@@ -42,6 +42,30 @@ abstract class ComponentBloc extends BlocBase {
           }
           break;
         }
+      case ComponentType.number:
+        {
+          if (shape == _value_shape_template)
+            return NumberTemplateBloc.fromMap(dataMap);
+          else if (shape == _value_shape_instance)
+            return NumberInstanceBloc.fromMap(dataMap);
+          break;
+        }
+      case ComponentType.text:
+        {
+          if (shape == _value_shape_template)
+            return TextTemplateBloc.fromMap(dataMap);
+          else if (shape == _value_shape_instance)
+            return TextInstanceBloc.fromMap(dataMap);
+          break;
+        }
+      case ComponentType.textBox:
+        {
+          if (shape == _value_shape_template)
+            return TextBoxTemplateBloc.fromMap(dataMap);
+          else if (shape == _value_shape_instance)
+            return TextBoxInstanceBloc.fromMap(dataMap);
+          break;
+        }
       case ComponentType.infoComponent:
         break;
     }

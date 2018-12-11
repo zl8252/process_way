@@ -19,6 +19,12 @@ class ComponentTemplate extends StatelessWidget {
         return new CheckboxTemplate(bloc: bloc);
       case ComponentType.groupComponent:
         return new GroupTemplate(bloc: bloc);
+      case ComponentType.number:
+        return new NumberTemplate(bloc: bloc);
+      case ComponentType.text:
+        return new TextTemplate(bloc: bloc);
+      case ComponentType.textBox:
+        return new TextBoxTemplate(bloc: bloc);
       case ComponentType.infoComponent:
         break;
     }
