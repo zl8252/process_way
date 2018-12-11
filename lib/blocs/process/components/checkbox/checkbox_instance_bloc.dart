@@ -5,8 +5,13 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:process_way/process_way.dart';
 
-class CheckboxInstanceBloc extends CheckboxTemplateBloc
+import '_checkbox_shared.dart';
+
+class CheckboxInstanceBloc extends CheckboxShared
     implements IComponentInstanceBloc {
+  static const _key_mold = "mold";
+  static const _key_cast = "cast";
+
   CheckboxInstanceBloc({
     @required CheckboxMold mold,
     @required CheckboxCast cast,
@@ -16,6 +21,13 @@ class CheckboxInstanceBloc extends CheckboxTemplateBloc
     _inIsCheckedSubject.listen(_onInIsChecked);
 
     _updateIsCheckedStream();
+  }
+
+  static CheckboxInstanceBloc fromMap(Map map) {
+    return new CheckboxInstanceBloc(
+      mold: new CheckboxMold.fromMap(map[_key_mold]),
+      cast: new CheckboxCast.fromMap(map[_key_cast]),
+    );
   }
 
   CheckboxCast _cast;
@@ -40,6 +52,15 @@ class CheckboxInstanceBloc extends CheckboxTemplateBloc
   // --
   void _updateIsCheckedStream() {
     _isCheckedSubject.add(_cast.isChecked);
+  }
+
+  @override
+  Future<Map> toMap() async {
+    return <String, dynamic>{
+      "bloc": "CheckboxInstanceBloc",
+      _key_mold: mold.toMap(),
+      _key_cast: _cast.toMap(),
+    };
   }
 
   @override

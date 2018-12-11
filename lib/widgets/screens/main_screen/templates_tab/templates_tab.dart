@@ -36,7 +36,7 @@ class _TemplatesTabState extends State<TemplatesTab>
   void _onShowDesignerScreen(ShowDesignerScreenInvoke invoke) {
     print("Starting designer for template:${invoke.templateId}");
 
-    Navigator.of(context).push(
+    Future editCompletedFuture = Navigator.of(context).push(
       new MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) {
@@ -46,6 +46,10 @@ class _TemplatesTabState extends State<TemplatesTab>
         },
       ),
     );
+
+    editCompletedFuture.then((_) {
+      _processesBloc.inSaveTemplatesToStorage.add(null);
+    });
   }
 
   void _createInstanceFromTemplate(int templateId) {
@@ -66,6 +70,24 @@ class _TemplatesTabState extends State<TemplatesTab>
     _processesBloc.inCreateNewTemplate.add(null);
   }
 
+  void _moveTemplateUp(TemplateBloc template) {
+    _processesBloc.inMoveTemplate.add(
+      new MoveTemplateRequest(
+        direction: MoveItemDirection.up,
+        template: template,
+      ),
+    );
+  }
+
+  void _moveTemplateDown(TemplateBloc template) {
+    _processesBloc.inMoveTemplate.add(
+      new MoveTemplateRequest(
+        direction: MoveItemDirection.down,
+        template: template,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Stack(
@@ -77,28 +99,31 @@ class _TemplatesTabState extends State<TemplatesTab>
             if (snapshot.data.length == 0) {
               return new Center(
                 child: new Text(
-                  "No Tenplates",
+                  "No Templates",
                   style: Theme.of(context).textTheme.title.copyWith(
-                    color: Colors.grey,
-                  ),
+                        color: Colors.grey,
+                      ),
                 ),
               );
             }
 
-            return new ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                TemplateBloc template = snapshot.data[index];
-
-                return new TemplateListItem(
-                  key: new ObjectKey(template),
-                  template: template,
-                  onCreateInstance: () =>
-                      _createInstanceFromTemplate(template.id),
-                  onDesign: () => _designTemplate(template.id),
-                  onDelete: () => _deleteTemplate(template.id),
-                );
-              },
+            return new SingleChildScrollView(
+              child: new Column(
+                children: snapshot.data.map(
+                  (template) {
+                    return new TemplateListItem(
+                      key: new ObjectKey(template),
+                      template: template,
+                      onCreateInstance: () =>
+                          _createInstanceFromTemplate(template.id),
+                      onDesign: () => _designTemplate(template.id),
+                      onDelete: () => _deleteTemplate(template.id),
+                      onMoveUp: () => _moveTemplateUp(template),
+                      onMoveDown: () => _moveTemplateDown(template),
+                    );
+                  },
+                ).toList(),
+              ),
             );
           },
         ),

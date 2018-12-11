@@ -10,10 +10,14 @@ class TemplateListItem extends StatefulWidget {
     @required this.onCreateInstance,
     @required this.onDesign,
     @required this.onDelete,
+    @required this.onMoveUp,
+    @required this.onMoveDown,
   })  : assert(template != null),
         assert(onCreateInstance != null),
         assert(onDesign != null),
         assert(onDelete != null),
+        assert(onMoveUp != null),
+        assert(onMoveDown != null),
         super(key: key);
 
   final TemplateBloc template;
@@ -21,6 +25,9 @@ class TemplateListItem extends StatefulWidget {
   final VoidCallback onCreateInstance;
   final VoidCallback onDesign;
   final VoidCallback onDelete;
+
+  final VoidCallback onMoveUp;
+  final VoidCallback onMoveDown;
 
   @override
   _TemplateListItemState createState() => _TemplateListItemState();
@@ -62,9 +69,22 @@ class _TemplateListItemState extends State<TemplateListItem> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        new RxText(
-                          widget.template.title,
-                          style: Theme.of(context).textTheme.title,
+                        new Row(
+                          children: <Widget>[
+                            new RxText(
+                              widget.template.title,
+                              style: Theme.of(context).textTheme.title,
+                            ),
+                            new Expanded(child: new Container()),
+                            new IconButton(
+                              icon: new Icon(Icons.expand_less),
+                              onPressed: widget.onMoveUp,
+                            ),
+                            new IconButton(
+                              icon: Icon(Icons.expand_more),
+                              onPressed: widget.onMoveDown,
+                            ),
+                          ],
                         ),
                         new RxOptionalText(widget.template.details),
                       ],

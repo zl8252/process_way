@@ -20,6 +20,8 @@ class _AppState extends State<App> {
     _processesBloc = new ProcessesBloc(
       instancesRepository: new InstancesRepository(),
       templatesRepository: new TemplatesRepository(),
+      instancesPersistence: new InstancesPersistence(),
+      templatesPersistence: new TemplatesPersistence(),
       processCreationBloc: _processCreationBloc,
     );
   }

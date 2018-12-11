@@ -119,7 +119,10 @@ class _GroupInstanceItems extends StatelessWidget {
         return new Column(
           children: snapshot.data
               .map(
-                (itemBloc) => new ComponentInstance(bloc: itemBloc),
+                (item) => new ComponentInstance(
+                      key: new ObjectKey(item),
+                      bloc: item,
+                    ),
               )
               .toList(),
         );

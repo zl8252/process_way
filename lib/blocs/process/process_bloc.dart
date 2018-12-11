@@ -36,6 +36,8 @@ abstract class ProcessBloc extends BlocBase {
 
   Sink<Optional<String>> get inDetails => _inDetailsSubject;
 
+  Sink<Completer<Map>> get inToMap;
+
   // input handling
   Future _onInTitle(String data) async {
     mold = mold.copyWith(title: data);

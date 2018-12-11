@@ -5,8 +5,10 @@ import 'package:process_way/process_way.dart';
 
 class ComponentTemplate extends StatelessWidget {
   ComponentTemplate({
+    Key key,
     @required this.bloc,
-  }) : assert(bloc != null);
+  })  : assert(bloc != null),
+        super(key: key);
 
   final IComponentTemplateBloc bloc;
 

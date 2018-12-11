@@ -9,6 +9,9 @@ import 'package:process_way/process_way.dart';
 import '_group_shared.dart';
 
 class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
+  static const _key_mold = "mold";
+  static const _key_items = "items";
+
   GroupTemplateBloc({
     bool isExpanded = true,
     @required GroupMold mold,
@@ -23,6 +26,18 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
     _inCreateInstanceSubject.listen(_onInCreateInstance);
 
     _updateItemsStream();
+  }
+
+  static GroupTemplateBloc fromMap(Map map) {
+    return new GroupTemplateBloc(
+      mold: new GroupMold.fromMap(map[_key_mold]),
+      items: map[_key_items].map<IComponentTemplateBloc>(
+        (itemMap) {
+          ComponentBloc component = ComponentBloc.fromMap(itemMap);
+          return component as IComponentTemplateBloc;
+        },
+      ).toList(),
+    );
   }
 
   List<IComponentTemplateBloc> _items;
@@ -118,6 +133,23 @@ class GroupTemplateBloc extends GroupShared implements IComponentTemplateBloc {
   // --
   void _updateItemsStream() {
     _itemsSubject.add(new UnmodifiableListView(_items));
+  }
+
+  @override
+  Future<Map> toMap() async {
+    List<Future<Map>> itemsMapsFutures = [];
+    for (final item in _items) {
+      Completer<Map> completer = new Completer();
+
+      item.inToMap.add(completer);
+      itemsMapsFutures.add(completer.future);
+    }
+
+    return <String, dynamic>{
+      "bloc": "GroupTemplateBloc",
+      _key_mold: mold.toMap(),
+      _key_items: await Future.wait<Map>(itemsMapsFutures),
+    };
   }
 
   @override

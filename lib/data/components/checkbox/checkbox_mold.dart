@@ -18,7 +18,7 @@ class CheckboxMold extends ComponentMold {
 
   factory CheckboxMold.fromMap(Map map) {
     return new CheckboxMold(
-      initialValue: map[_mapKey_title],
+      initialValue: map[_mapKey_initialValue],
       title: map[_mapKey_title],
       subtitle: new Optional.fromNullable(map[_mapKey_subtitle]),
     );

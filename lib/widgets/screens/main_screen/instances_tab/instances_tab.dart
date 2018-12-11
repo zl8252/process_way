@@ -35,7 +35,7 @@ class _InstancesTabState extends State<InstancesTab>
   }
 
   void _onOutShowRunnerScreen(ShowRunnerScreenInvoke invoke) {
-    Navigator.of(context).push(
+    Future runnerCompletedFuture = Navigator.of(context).push(
       new MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) {
@@ -45,6 +45,10 @@ class _InstancesTabState extends State<InstancesTab>
         },
       ),
     );
+
+    runnerCompletedFuture.then((_) {
+      _processesBloc.inSaveInstancesToStorage.add(null);
+    });
   }
 
   void _runInstance(InstanceBloc instance) {
@@ -94,20 +98,21 @@ class _InstancesTabState extends State<InstancesTab>
             );
           }
 
-          return new ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              InstanceBloc instance = snapshot.data[index];
-
-              return new InstanceListItem(
-                key: new ObjectKey(instance),
-                bloc: instance,
-                onRun: () => _runInstance(instance),
-                onDelete: () => _deleteInstance(instance),
-                onMoveUp: () => _moveInstanceUp(instance),
-                onMoveDown: () => _moveInstanceDown(instance),
-              );
-            },
+          return new SingleChildScrollView(
+            child: new Column(
+              children: snapshot.data
+                  .map(
+                    (instance) => new InstanceListItem(
+                          key: new ObjectKey(instance),
+                          bloc: instance,
+                          onRun: () => _runInstance(instance),
+                          onDelete: () => _deleteInstance(instance),
+                          onMoveUp: () => _moveInstanceUp(instance),
+                          onMoveDown: () => _moveInstanceDown(instance),
+                        ),
+                  )
+                  .toList(),
+            ),
           );
         },
       ),

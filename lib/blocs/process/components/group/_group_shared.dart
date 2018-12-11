@@ -71,6 +71,8 @@ abstract class GroupShared extends ComponentBloc {
   @override
   @mustCallSuper
   void dispose() {
+    super.dispose();
+
     _isExpandedSubject.close();
     _titleSubject.close();
 

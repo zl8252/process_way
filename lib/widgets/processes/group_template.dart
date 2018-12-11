@@ -191,6 +191,7 @@ class _GroupTemplateItems extends StatelessWidget {
                 onMoveItemDown: () => _moveItem(item, MoveItemDirection.down),
               ),
               new ComponentTemplate(
+                key: new ObjectKey(item),
                 bloc: item,
               ),
               new _ItemSeparator(),

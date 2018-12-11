@@ -9,6 +9,13 @@ class TemplatesRepository {
     return _templates.values.toList();
   }
 
+  Future<Null> replaceWithNewTemplates(List<TemplateBloc> templates) async {
+    _templates.clear();
+    for (final template in templates) {
+      await saveTemplate(template);
+    }
+  }
+
   Future<TemplateBloc> loadTemplateById(int templateId) async {
     if (!_templates.containsKey(templateId)) {
       throw new Exception(
