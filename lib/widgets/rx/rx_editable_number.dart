@@ -42,7 +42,7 @@ class _RxEditableNumberState extends State<RxEditableNumber> {
 
     _textEditingController = new TextEditingController(text: initialText);
 
-   // _attachToStream();
+    _attachToStream();
   }
 
   @override
@@ -50,7 +50,7 @@ class _RxEditableNumberState extends State<RxEditableNumber> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.stream != widget.stream) {
-     // _attachToStream();
+      // _attachToStream();
     }
   }
 
@@ -58,13 +58,14 @@ class _RxEditableNumberState extends State<RxEditableNumber> {
     widget.stream.listen(
       (Optional<double> num) {
         String str = "";
-        if (num.isPresent) {
-          str = "${num.value}";
-        }
-
-        if (str != _textEditingController.text) {
+        if (!num.isPresent) {
+//          str = "${num.value}";
           _textEditingController.text = str;
         }
+
+//        if (str != _textEditingController.text) {
+//          _textEditingController.text = str;
+//        }
       },
     );
   }

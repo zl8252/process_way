@@ -110,6 +110,15 @@ class InstanceBloc extends ProcessBloc {
     _rootGroupSubject.add(_rootGroup);
   }
 
+  String createExportString() {
+    String r = "# ${_cast.instanceName}";
+    r += "\n\n";
+    r += _rootGroup.toExportString();
+
+
+    return r;
+  }
+
   @override
   void dispose() {
     super.dispose();

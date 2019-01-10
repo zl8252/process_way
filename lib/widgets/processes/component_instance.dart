@@ -17,6 +17,8 @@ class ComponentInstance extends StatelessWidget {
     switch (bloc.type) {
       case ComponentType.checkboxComponent:
         return new CheckboxInstance(bloc: bloc);
+      case ComponentType.dateComponent:
+        return new DateInstance(bloc: bloc);
       case ComponentType.groupComponent:
         return new GroupInstance(bloc: bloc);
       case ComponentType.number:

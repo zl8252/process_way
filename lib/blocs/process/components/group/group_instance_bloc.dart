@@ -52,6 +52,21 @@ class GroupInstanceBloc extends GroupShared implements IComponentInstanceBloc {
     _itemsSubject.add(new UnmodifiableListView(_items));
   }
 
+
+  @override
+  String toExportString() {
+    String r = "## ${mold.title}\n\n";
+
+    for (final item in _items){
+      String s = item.toExportString();
+
+      r += s;
+      r += "\n";
+    }
+
+    return r;
+  }
+
   @override
   Future<Map> toMap() async {
     List<Future<Map>> itemsMapsFutures = [];

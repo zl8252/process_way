@@ -9,11 +9,13 @@ class InstanceListItem extends StatefulWidget {
     @required this.bloc,
     @required this.onRun,
     @required this.onDelete,
+    @required this.onExport,
     @required this.onMoveUp,
     @required this.onMoveDown,
   })  : assert(bloc != null),
         assert(onRun != null),
         assert(onDelete != null),
+        assert(onExport != null),
         assert(onMoveUp != null),
         assert(onMoveDown != null),
         super(key: key);
@@ -22,6 +24,7 @@ class InstanceListItem extends StatefulWidget {
 
   final VoidCallback onRun;
   final VoidCallback onDelete;
+  final VoidCallback onExport;
 
   final VoidCallback onMoveUp;
   final VoidCallback onMoveDown;
@@ -131,6 +134,10 @@ class _InstanceListItemState extends State<InstanceListItem> {
         child: new Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            new FlatButton(
+              child: new Text("Export"),
+              onPressed: widget.onExport,
+            ),
             new Expanded(child: new Container()),
             new IconButton(
               icon: new Icon(Icons.clear),

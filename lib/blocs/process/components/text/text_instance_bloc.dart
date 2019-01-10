@@ -21,6 +21,12 @@ class TextInstanceBloc extends TextShared implements IComponentInstanceBloc {
     );
   }
 
+
+  @override
+  String toExportString() {
+    return "\n${mold.text}\n";
+  }
+
   @override
   Future<Map> toMap() async {
     return <String, dynamic>{

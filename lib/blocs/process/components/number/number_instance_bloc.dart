@@ -51,6 +51,18 @@ class NumberInstanceBloc extends NumberShared
     _valueSubject.add(cast.value);
   }
 
+
+  @override
+  String toExportString() {
+    String v = "__";
+
+    if (cast.value.isPresent){
+      v = "${cast.value.value}";
+    }
+
+    return "${mold.label}: $v";
+  }
+
   @override
   Future<Map> toMap() async {
     return <String, dynamic>{

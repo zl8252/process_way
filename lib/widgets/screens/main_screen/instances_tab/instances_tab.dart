@@ -2,6 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import 'package:share/share.dart';
+
 import 'package:process_way/process_way.dart';
 
 class InstancesTab extends StatefulWidget {
@@ -61,6 +63,12 @@ class _InstancesTabState extends State<InstancesTab>
     _processesBloc.inDeleteInstance.add(instance.id);
   }
 
+  void _exportInstance(InstanceBloc instance) {
+    String exportString = instance.createExportString();
+
+    Share.share(exportString);
+  }
+
   void _moveInstanceUp(InstanceBloc instance) {
     _processesBloc.inMoveInstance.add(
       new MoveInstanceRequest(
@@ -107,6 +115,7 @@ class _InstancesTabState extends State<InstancesTab>
                           bloc: instance,
                           onRun: () => _runInstance(instance),
                           onDelete: () => _deleteInstance(instance),
+                          onExport: () => _exportInstance(instance),
                           onMoveUp: () => _moveInstanceUp(instance),
                           onMoveDown: () => _moveInstanceDown(instance),
                         ),

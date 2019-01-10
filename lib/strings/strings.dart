@@ -5,6 +5,8 @@ class Strings {
     switch (componentType) {
       case ComponentType.checkboxComponent:
         return "CheckBox";
+      case ComponentType.dateComponent:
+        return "Date";
       case ComponentType.groupComponent:
         return "Group";
       case ComponentType.infoComponent:

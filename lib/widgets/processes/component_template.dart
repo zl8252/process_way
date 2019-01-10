@@ -17,6 +17,8 @@ class ComponentTemplate extends StatelessWidget {
     switch (bloc.type) {
       case ComponentType.checkboxComponent:
         return new CheckboxTemplate(bloc: bloc);
+      case ComponentType.dateComponent:
+        return new DateTemplate(bloc: bloc);
       case ComponentType.groupComponent:
         return new GroupTemplate(bloc: bloc);
       case ComponentType.number:

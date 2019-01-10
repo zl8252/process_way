@@ -1,5 +1,7 @@
 export 'checkbox_instance.dart';
 export 'checkbox_template.dart';
+export 'date_instance.dart';
+export 'date_template.dart';
 export 'component_instance.dart';
 export 'component_template.dart';
 export 'template_info_header.dart';

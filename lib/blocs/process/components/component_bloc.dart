@@ -33,6 +33,15 @@ abstract class ComponentBloc extends BlocBase {
           }
           break;
         }
+      case ComponentType.dateComponent:
+        {
+          if (shape == _value_shape_template) {
+            return DateTemplateBloc.fromMap(dataMap);
+          } else if (shape == _value_shape_instance) {
+            return DateInstanceBloc.fromMap(dataMap);
+          }
+          break;
+        }
       case ComponentType.groupComponent:
         {
           if (shape == _value_shape_template) {

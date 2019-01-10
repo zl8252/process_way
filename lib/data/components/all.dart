@@ -1,6 +1,9 @@
 export 'checkbox/checkbox_cast.dart';
 export 'checkbox/checkbox_mold.dart';
 
+export 'date/date_cast.dart';
+export 'date/date_mold.dart';
+
 export 'group/group_cast.dart';
 export 'group/group_mold.dart';
 

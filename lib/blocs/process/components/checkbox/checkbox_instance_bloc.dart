@@ -54,6 +54,12 @@ class CheckboxInstanceBloc extends CheckboxShared
     _isCheckedSubject.add(_cast.isChecked);
   }
 
+
+  @override
+  String toExportString() {
+    return "[${_cast.isChecked ? "X": " "}] ${mold.title} ${mold.subtitle.or("")}";
+  }
+
   @override
   Future<Map> toMap() async {
     return <String, dynamic>{

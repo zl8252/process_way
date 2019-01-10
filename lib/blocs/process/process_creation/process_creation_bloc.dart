@@ -33,6 +33,11 @@ class ProcessCreationBloc extends BlocBase {
           createCheckboxTemplate(),
         );
         break;
+      case ComponentType.dateComponent:
+        delegate.completer.complete(
+          createDateTemplate(),
+        );
+        break;
       case ComponentType.groupComponent:
         delegate.completer.complete(
           createGroupTemplate(),
@@ -86,6 +91,13 @@ class ProcessCreationBloc extends BlocBase {
         title: "Checkbox",
         subtitle: new Optional.absent(),
       ),
+    );
+  }
+
+  @visibleForTesting
+  DateTemplateBloc createDateTemplate() {
+    return new DateTemplateBloc(
+      mold: new DateMold(title: "Date"),
     );
   }
 

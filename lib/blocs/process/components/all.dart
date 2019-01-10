@@ -1,6 +1,9 @@
 export 'checkbox/checkbox_instance_bloc.dart';
 export 'checkbox/checkbox_template_bloc.dart';
 
+export 'date/date_instance_bloc.dart';
+export 'date/date_template_bloc.dart';
+
 export 'group/all.dart';
 
 export 'number/all.dart';

@@ -51,6 +51,12 @@ class TextBoxInstanceBloc extends TextBoxShared
     _textSubject.add(cast.text);
   }
 
+
+  @override
+  String toExportString() {
+    return "${mold.title}: ${cast.text}";
+  }
+
   @override
   Future<Map> toMap() async {
     return <String, dynamic>{

@@ -25,6 +25,11 @@ class ComponentTypePickerDialog extends StatelessWidget {
             ),
             new ListTile(
               title: new Text(
+                  Strings.componentTypeToString(ComponentType.dateComponent)),
+              onTap: () => onComponentTypePicked(ComponentType.dateComponent),
+            ),
+            new ListTile(
+              title: new Text(
                   Strings.componentTypeToString(ComponentType.groupComponent)),
               onTap: () => onComponentTypePicked(ComponentType.groupComponent),
             ),
