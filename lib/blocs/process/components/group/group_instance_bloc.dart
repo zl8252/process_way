@@ -55,7 +55,7 @@ class GroupInstanceBloc extends GroupShared implements IComponentInstanceBloc {
 
   @override
   String toExportString() {
-    String r = "## ${mold.title}\n\n";
+    String r = "\n## ${mold.title}\n\n";
 
     for (final item in _items){
       String s = item.toExportString();

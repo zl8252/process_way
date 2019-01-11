@@ -24,7 +24,7 @@ class TextInstanceBloc extends TextShared implements IComponentInstanceBloc {
 
   @override
   String toExportString() {
-    return "\n${mold.text}\n";
+    return "${mold.text}";
   }
 
   @override

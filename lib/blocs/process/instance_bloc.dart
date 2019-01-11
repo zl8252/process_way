@@ -112,7 +112,7 @@ class InstanceBloc extends ProcessBloc {
 
   String createExportString() {
     String r = "# ${_cast.instanceName}";
-    r += "\n\n";
+    r += "\n";
     r += _rootGroup.toExportString();
 
 
